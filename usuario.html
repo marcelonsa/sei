@@ -39,7 +39,8 @@
     body{font-family:var(--font);background:#0B1929;color:var(--gray-800);min-height:100vh;display:flex}
 
     /* ═══ SIDEBAR ═══ */
-    .sidebar{width:220px;min-height:100vh;background:var(--blue-950);display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;bottom:0;z-index:50;border-right:1px solid rgba(255,255,255,0.06);overflow-y:auto;overflow-x:hidden}
+    .sidebar{width:220px;min-height:100vh;background:var(--blue-950);display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;bottom:0;z-index:50;border-right:1px solid rgba(255,255,255,0.06);overflow-y:auto;overflow-x:hidden;transition:transform .25s ease}
+    .sidebar.collapsed{transform:translateX(-220px)}
     .sidebar__brand{padding:24px 20px 20px;border-bottom:1px solid rgba(255,255,255,0.07)}
     .brand-logo{display:flex;align-items:center;gap:12px}
     .brand-logo__icon{width:44px;height:44px;border-radius:var(--r-md);background:linear-gradient(135deg,var(--blue-600),var(--blue-400));display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(24,95,165,0.5)}
@@ -60,10 +61,25 @@
     .nav-item__badge{margin-left:auto;background:var(--blue-600);color:#fff;font-size:10px;font-weight:600;border-radius:999px;padding:1px 7px;min-width:20px;text-align:center;transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
     .nav-item__badge.bump{transform:scale(1.4)}
     .sidebar__footer{padding:16px;border-top:1px solid rgba(255,255,255,0.07)}
-    .sidebar__user{display:flex;align-items:center;gap:10px}
+    .sidebar__user{display:flex;align-items:center;gap:10px;cursor:pointer;border-radius:8px;padding:4px;transition:background var(--t)}
+    .sidebar__user:hover{background:rgba(255,255,255,0.05)}
+    .sidebar__user:hover .sidebar__user-name::after{content:' ✎';opacity:.6;font-size:10px}
     .sidebar__avatar{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--blue-600),var(--blue-400));display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;font-weight:700;color:#fff}
     .sidebar__user-name{font-size:13px;font-weight:600;color:var(--gray-200)}
     .sidebar__user-role{font-size:11px;color:var(--gray-500)}
+
+    /* ═══ STATUS ONLINE/OFFLINE ═══ */
+    .status-bar{display:flex;align-items:center;gap:6px;padding:6px 12px;font-size:10px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+    .status-bar__dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+    .status-bar--online .status-bar__dot{background:#4ade80;box-shadow:0 0 6px rgba(74,222,128,.5)}
+    .status-bar--online .status-bar__text{color:#4ade80}
+    .status-bar--offline .status-bar__dot{background:#f87171}
+    .status-bar--offline .status-bar__text{color:#f87171}
+    .status-bar--syncing .status-bar__dot{background:#fbbf24;animation:pulse 1s ease-in-out infinite}
+    .status-bar--syncing .status-bar__text{color:#fbbf24}
+
+    /* ═══ BADGE URGÊNCIAS ═══ */
+    .nav-item__badge--urgente{background:#dc2626 !important;animation:prazo-pulse 1.8s ease-in-out infinite}
 
     /* ═══ CARD DRIVE ═══ */
     .drive-card{margin:0 12px 12px;border-radius:var(--r-md);background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);padding:10px 12px;font-size:11px}
@@ -91,9 +107,34 @@
     .drive-alert__dismiss{background:none;border:none;cursor:pointer;color:#60a5fa;padding:4px;border-radius:4px;display:flex;align-items:center}
     .drive-alert__dismiss svg{width:14px;height:14px}
 
+    /* ═══ MODAL NOVIDADES ═══ */
+    .novidades-overlay{position:fixed;inset:0;background:rgba(15,23,42,.6);backdrop-filter:blur(4px);z-index:3000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+    .novidades-overlay.is-visible{opacity:1;pointer-events:auto}
+    .novidades-modal{background:#fff;border-radius:20px;width:460px;max-width:95vw;box-shadow:0 32px 80px rgba(0,0,0,0.25);overflow:hidden;transform:translateY(20px);transition:transform .25s}
+    .novidades-overlay.is-visible .novidades-modal{transform:translateY(0)}
+    .novidades-head{background:linear-gradient(135deg,#0f2744,#1d6fa4);padding:28px 28px 20px;text-align:center}
+    .novidades-head__icon{font-size:40px;margin-bottom:8px}
+    .novidades-head__title{font-size:18px;font-weight:700;color:#fff;margin:0}
+    .novidades-head__versao{font-size:12px;color:#93c5fd;margin-top:4px}
+    .novidades-body{padding:20px 28px}
+    .novidades-item{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--gray-100)}
+    .novidades-item:last-child{border-bottom:none}
+    .novidades-item__icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:1px}
+    .novidades-item__icon--green{background:#DCFCE7}
+    .novidades-item__icon--blue{background:#DBEAFE}
+    .novidades-item__icon--purple{background:#F5F3FF}
+    .novidades-item__icon--amber{background:#FEF9C3}
+    .novidades-item__text{font-size:13px;color:var(--gray-700);line-height:1.5}
+    .novidades-item__text strong{font-weight:600;color:var(--gray-900)}
+    .novidades-footer{padding:12px 28px 24px;text-align:center}
+    .novidades-btn{padding:10px 32px;font-size:14px;font-weight:600;background:#0f2744;color:#fff;border:none;border-radius:999px;cursor:pointer;transition:background var(--t)}
+    .novidades-btn:hover{background:#1d6fa4}
+
     /* ═══ MAIN ═══ */
-    .main-area{margin-left:220px;flex:1;display:flex;flex-direction:column;min-height:100vh;background:#F0F4F9;min-width:0}
-    .topbar{background:#fff;border-bottom:1px solid var(--gray-200);padding:10px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:40}
+    .main-area{margin-left:220px;flex:1;display:flex;flex-direction:column;min-height:100vh;background:#F0F4F9;min-width:0;transition:margin-left .25s ease}
+    .main-area.expanded{margin-left:0}
+    .topbar{background:#fff;border-bottom:1px solid var(--gray-200);padding:10px 18px 10px 56px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:40;transition:padding .25s ease}
+    .topbar.wide{padding-left:18px}
     .topbar__title{font-size:18px;font-weight:700;color:var(--gray-900);letter-spacing:-.02em}
     .topbar__sub{font-size:12px;color:var(--gray-500);margin-top:1px}
     .topbar__right{display:flex;align-items:center;gap:10px}
@@ -211,8 +252,6 @@
 
     /* ═══ TABLE CARD ═══ */
     .table-card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--r-xl);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04)}
-    .table-scroll-top{overflow-x:auto;overflow-y:hidden;height:12px;margin-bottom:-12px}
-    .table-scroll-top-inner{height:1px}
     .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;width:100%;border-radius:var(--r-xl)}
     .table-wrap table{min-width:1100px}
     .table-toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:16px 20px;border-bottom:1px solid var(--gray-100)}
@@ -410,13 +449,13 @@
     .status-dot--done{background:var(--green-500)}
     .btn-link-reset{border:none;background:transparent;padding:0}
     .stat-link button{font:inherit;color:inherit;border:0;background:transparent;padding:0;cursor:pointer}
-    .sidebar-toggle{display:none;position:fixed;top:10px;left:10px;z-index:100;width:36px;height:36px;border-radius:8px;background:var(--blue-950);border:1px solid rgba(255,255,255,0.15);color:#fff;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
+    .sidebar-toggle{display:flex;position:fixed;top:10px;left:10px;z-index:100;width:36px;height:36px;border-radius:8px;background:var(--blue-950);border:1px solid rgba(255,255,255,0.15);color:#fff;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.3);transition:all var(--t)}
+    .sidebar-toggle:hover{background:#1d6fa4}
     .sidebar-toggle svg{width:18px;height:18px}
     .sidebar.collapsed{transform:translateX(-220px)}
     .main-area.expanded{margin-left:0}
 
     @media (max-width:960px){
-      .sidebar-toggle{display:flex}
       .sidebar{transform:translateX(-220px);transition:transform .25s ease}
       .sidebar.open{transform:translateX(0)}
       .main-area{margin-left:0;transition:margin-left .25s ease}
@@ -533,11 +572,16 @@
       </div>
     </nav>
 
+    <div class="status-bar status-bar--online" id="statusBar">
+      <div class="status-bar__dot"></div>
+      <span class="status-bar__text" id="statusText">Online</span>
+      <span style="margin-left:auto;color:var(--gray-600);font-size:10px" id="statusSync"></span>
+    </div>
     <div class="sidebar__footer">
-      <div class="sidebar__user">
-        <div class="sidebar__avatar">SEI</div>
+      <div class="sidebar__user" onclick="editarNome()" title="Clique para editar seu nome">
+        <div class="sidebar__avatar" id="userAvatar">?</div>
         <div>
-          <div class="sidebar__user-name">NSA Contabilidade</div>
+          <div class="sidebar__user-name" id="userName">Clique para configurar</div>
           <div class="sidebar__user-role">Visualizador</div>
         </div>
       </div>
@@ -659,9 +703,6 @@
           </div>
         </div>
 
-        <div class="table-scroll-top" id="tableScrollTop">
-          <div class="table-scroll-top-inner" id="tableScrollTopInner"></div>
-        </div>
         <div class="table-wrap" id="tableWrap">
           <table id="tabelaRegistros" role="grid" aria-label="Lista de recadastramentos">
             <thead>
@@ -789,6 +830,21 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:14px;height:14px"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
           Gerar Excel
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL NOVIDADES -->
+  <div class="novidades-overlay" id="novidadesOverlay">
+    <div class="novidades-modal">
+      <div class="novidades-head">
+        <div class="novidades-head__icon">🚀</div>
+        <h2 class="novidades-head__title">Novidades da Atualização</h2>
+        <div class="novidades-head__versao" id="novidadesVersao">Versão 1.0</div>
+      </div>
+      <div class="novidades-body" id="novidadesBody"></div>
+      <div class="novidades-footer">
+        <button class="novidades-btn" onclick="fecharNovidades()">Entendido! ✓</button>
       </div>
     </div>
   </div>
@@ -1509,6 +1565,9 @@
       renderDriveCard();
       renderFiltroIntimacao();
       verificarNovoBkpDrive();
+      setTimeout(verificarNovidades, 800);
+      carregarNome();
+      atualizarStatus(navigator.onLine?'online':'offline','');
       document.getElementById('searchInp').addEventListener('input',function(e){
         buscaAtual=e.target.value.toLowerCase().trim();
         renderTabela();
@@ -1781,41 +1840,53 @@
         var statusTxt=item.finalizado?'Finalizado':'Pendente';
         var statusDot=item.finalizado?'status-dot status-dot--done':'status-dot status-dot--pending';
 
-        // INTIMAÇÃO read-only
-        var dias=item.intimacao && item.prazoPrazo ? diasParaPrazo(item.prazoPrazo) : null;
+        // INTIMAÇÃO read-only — oculta se finalizado
+        var dias=item.intimacao && item.prazoPrazo && !item.finalizado ? diasParaPrazo(item.prazoPrazo) : null;
         var prazoBadge='';
         var trClass=(item.finalizado?'tr-finalizado':'');
-        if(item.intimacao && !item.finalizado) trClass='tr-intimacao';
-        if(item.intimacao && item.prazoPrazo && dias!==null && !item.finalizado){
-          if(dias<0){ prazoBadge='<div class="prazo-badge prazo-badge--vencido">⚠ Vencido há '+Math.abs(dias)+'d</div>'; trClass='tr-prazo-vencido'; }
-          else if(dias<=10){ prazoBadge='<div class="prazo-badge prazo-badge--urgente">⏰ '+dias+' dia'+(dias!==1?'s':'')+' restante'+(dias!==1?'s':'')+'</div>'; trClass='tr-prazo-urgente'; }
-          else { var dp=item.prazoPrazo.split('-'); prazoBadge='<div class="prazo-badge prazo-badge--ok">📅 '+dp[2]+'/'+dp[1]+'/'+dp[0]+'</div>'; trClass='tr-intimacao'; }
+        if(!item.finalizado){
+          if(item.intimacao) trClass='tr-intimacao';
+          if(item.intimacao && item.prazoPrazo && dias!==null){
+            if(dias<0){ prazoBadge='<div class="prazo-badge prazo-badge--vencido">⚠ Vencido há '+Math.abs(dias)+'d</div>'; trClass='tr-prazo-vencido'; }
+            else if(dias<=10){ prazoBadge='<div class="prazo-badge prazo-badge--urgente">⏰ '+dias+' dia'+(dias!==1?'s':'')+' restante'+(dias!==1?'s':'')+'</div>'; trClass='tr-prazo-urgente'; }
+            else { var dp=item.prazoPrazo.split('-'); prazoBadge='<div class="prazo-badge prazo-badge--ok">📅 '+dp[2]+'/'+dp[1]+'/'+dp[0]+'</div>'; trClass='tr-intimacao'; }
+          }
         }
         var temHistorico=!!(item.respostaData||item.respostaTexto);
-        var intimacaoHtml='<div class="intimacao-cell">'+
-          '<span style="display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;'+(item.intimacao?'background:#F5F3FF;color:#6D28D9;border:1px solid #DDD6FE':'background:#F1F5F9;color:#64748B;border:1px solid #E2E8F0')+'">'+(item.intimacao?'✔ Sim':'✗ Não')+'</span>'+
-          (item.intimacao && item.prazoPrazo ? '<div style="margin-top:4px">'+prazoBadge+'</div>' : '')+
-          (temHistorico && !item.intimacao ? '<div style="font-size:10px;color:#1e40af;font-weight:600;margin-top:3px">✅ Respondida'+(item.respostaData?' em '+item.respostaData.split('-').reverse().join('/'):'')+'</div>' : '')+
-        '</div>';
+        var intimacaoHtml='<div class="intimacao-cell">';
+        if(item.finalizado){
+          intimacaoHtml+='<span style="font-size:11px;color:var(--gray-300);font-style:italic">—</span>';
+        } else {
+          intimacaoHtml+=
+            '<span style="display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:999px;font-size:11px;font-weight:700;'+(item.intimacao?'background:#F5F3FF;color:#6D28D9;border:1px solid #DDD6FE':'background:#F1F5F9;color:#64748B;border:1px solid #E2E8F0')+'">'+(item.intimacao?'✔ Sim':'✗ Não')+'</span>'+
+            (item.intimacao && item.prazoPrazo ? '<div style="margin-top:4px">'+prazoBadge+'</div>' : '')+
+            (temHistorico && !item.intimacao ? '<div style="font-size:10px;color:#1e40af;font-weight:600;margin-top:3px">✅ Respondida'+(item.respostaData?' em '+item.respostaData.split('-').reverse().join('/'):'')+'</div>' : '');
+        }
+        intimacaoHtml+='</div>';
 
-        // CONFERÊNCIA SEI — read-only
-        var confDias=item.confData ? diasParaPrazo(item.confData) : null;
+        // CONFERÊNCIA SEI read-only — oculta se finalizado
+        var confDias=item.confData && !item.finalizado ? diasParaPrazo(item.confData) : null;
         var confBadgeClass='conf-badge--none', confLabel='—', confDataStr='', confRowClass='';
-        if(item.confData){
+        if(!item.finalizado && item.confData){
           var cd=item.confData.split('-');
           confDataStr=cd[2]+'/'+cd[1]+'/'+cd[0];
           var diasPassados=confDias!==null ? -confDias : 999;
           if(diasPassados<=7){ confBadgeClass='conf-badge--ok'; confRowClass='tr-conf-ok'; }
-          else if(diasPassados<=30){ confBadgeClass='conf-badge--warn'; confRowClass='tr-conf-warn'; }
+          else if(diasPassados<=10){ confBadgeClass='conf-badge--warn'; confRowClass='tr-conf-warn'; }
           else { confBadgeClass='conf-badge--danger'; confRowClass='tr-conf-danger'; }
           var statusLabels={'sem_movimentacao':'😐 Sem mov.','com_movimentacao':'⚡ Com mov.','processo_encerrado':'✅ Encerrado','requer_acao':'⚠️ Requer ação'};
           confLabel=statusLabels[item.confStatus]||'🔍 Conferido';
         }
         if(!item.finalizado && confRowClass && !trClass) trClass=confRowClass;
-        var confHtml='<div class="conf-cell">'+
-          '<span class="conf-badge '+confBadgeClass+'">'+(item.confData?confLabel:'Não conferido')+'</span>'+
-          (item.confData?'<div class="conf-data">'+confDataStr+'</div>':'')+
-        '</div>';
+        var confHtml='<div class="conf-cell">';
+        if(item.finalizado){
+          confHtml+='<span style="font-size:11px;color:var(--gray-300);font-style:italic">—</span>';
+        } else {
+          confHtml+=
+            '<span class="conf-badge '+confBadgeClass+'">'+(item.confData?confLabel:'Não conferido')+'</span>'+
+            (item.confData?'<div class="conf-data">'+confDataStr+'</div>':'');
+        }
+        confHtml+='</div>';
 
         html+='<tr class="'+trClass+'" style="animation-delay:'+(i*0.02)+'s">'+
           '<td><div class="td-portal"><div class="portal-icon" style="background:linear-gradient(135deg,'+cores.dot+','+cores.text+')">'+esc(inicial)+'</div><div><div>'+hl(item.razao)+'</div><div class="muted-small"><span class="'+statusDot+'" style="display:inline-block;vertical-align:middle;margin-right:4px"></span>'+statusTxt+'</div></div></div></td>'+
@@ -1832,7 +1903,7 @@
         '</tr>';
       });
       t.innerHTML=html;
-      if(typeof iniciarScrollDuplo==='function') setTimeout(iniciarScrollDuplo,50);
+      if(typeof iniciarDragScroll==='function') setTimeout(iniciarDragScroll,50);
     }
 
     function setFinalizado(id, novoEstado){
@@ -1941,6 +2012,7 @@
           bkpEl.textContent='Nunca';
         }
       }
+      if(typeof atualizarBadgeUrgencias==='function') atualizarBadgeUrgencias();
     }
 
     function maisFrequente(obj){
@@ -2545,47 +2617,196 @@
     /* ═══ SIDEBAR TOGGLE ═══ */
     function toggleSidebar(){
       var sidebar=document.getElementById('sidebar');
-      sidebar.classList.toggle('open');
+      var mainArea=document.querySelector('.main-area');
+      var topbar=document.querySelector('.topbar');
+      var isCollapsed=sidebar.classList.toggle('collapsed');
+      // on small screens use 'open' class instead
+      if(window.innerWidth<=960){
+        sidebar.classList.remove('collapsed');
+        sidebar.classList.toggle('open');
+      } else {
+        mainArea.classList.toggle('expanded', isCollapsed);
+        topbar.classList.toggle('wide', isCollapsed);
+      }
     }
-    // Fechar sidebar ao clicar fora
+    // Fechar sidebar ao clicar fora em telas pequenas
     document.addEventListener('click', function(e){
+      if(window.innerWidth>960) return;
       var sidebar=document.getElementById('sidebar');
       var toggle=document.getElementById('sidebarToggle');
       if(sidebar && toggle && !sidebar.contains(e.target) && !toggle.contains(e.target)){
         sidebar.classList.remove('open');
       }
     });
-    /* ═══ SCROLL HORIZONTAL DUPLO ═══ */
-    function iniciarScrollDuplo(){
-      var top=document.getElementById('tableScrollTop');
+    /* ═══ AUTO SCROLL POR PROXIMIDADE DO MOUSE ═══ */
+    function iniciarDragScroll(){
       var wrap=document.getElementById('tableWrap');
-      var topInner=document.getElementById('tableScrollTopInner');
-      if(!top||!wrap||!topInner) return;
-      // Ajusta largura do inner para refletir a tabela
-      function ajustarLargura(){
-        var table=wrap.querySelector('table');
-        if(table) topInner.style.width=table.scrollWidth+'px';
+      if(!wrap) return;
+      var timer=null;
+      var speed=0;
+      var ZONE=80; // px da borda que ativa o scroll
+      var MAX=15;  // velocidade máxima
+
+      wrap.addEventListener('mousemove',function(e){
+        var rect=wrap.getBoundingClientRect();
+        var x=e.clientX - rect.left;
+        var w=rect.width;
+        cancelAnimationFrame(timer);
+        if(x < ZONE){
+          speed=-MAX * (1-(x/ZONE));
+          mover();
+        } else if(x > w-ZONE){
+          speed=MAX * (1-((w-x)/ZONE));
+          mover();
+        } else {
+          speed=0;
+        }
+      });
+
+      wrap.addEventListener('mouseleave',function(){
+        speed=0;
+        cancelAnimationFrame(timer);
+      });
+
+      function mover(){
+        wrap.scrollLeft+=speed;
+        if(speed!==0) timer=requestAnimationFrame(mover);
       }
-      ajustarLargura();
-      // Sincroniza scroll
-      var syncingTop=false, syncingWrap=false;
-      top.addEventListener('scroll',function(){
-        if(syncingWrap) return;
-        syncingTop=true;
-        wrap.scrollLeft=top.scrollLeft;
-        syncingTop=false;
-      });
-      wrap.addEventListener('scroll',function(){
-        if(syncingTop) return;
-        syncingWrap=true;
-        top.scrollLeft=wrap.scrollLeft;
-        syncingWrap=false;
-      });
-      // Re-ajusta quando tabela muda
-      var obs=new MutationObserver(ajustarLargura);
-      obs.observe(wrap,{childList:true,subtree:true});
+
+      // Touch suporte normal
+      var touchStartX=0, touchScrollLeft=0;
+      wrap.addEventListener('touchstart',function(e){
+        touchStartX=e.touches[0].pageX;
+        touchScrollLeft=wrap.scrollLeft;
+      },{passive:true});
+      wrap.addEventListener('touchmove',function(e){
+        wrap.scrollLeft=touchScrollLeft-(e.touches[0].pageX-touchStartX);
+      },{passive:true});
     }
-    document.addEventListener('DOMContentLoaded', iniciarScrollDuplo);
+    document.addEventListener('DOMContentLoaded', iniciarDragScroll);
+    /* ═══ SISTEMA DE NOVIDADES ═══ */
+    var VERSAO_SISTEMA='1.1';
+    var NOVIDADES_KEY='nsa_novidades_visto';
+
+    var NOVIDADES=[
+      {icon:'🔍', cor:'blue', titulo:'Conferência SEI', texto:'Nova coluna para registrar quando você conferiu o processo no SEI RJ, com status e cores por prazo.'},
+      {icon:'📋', cor:'purple', titulo:'Tooltip na Observação', texto:'Passe o mouse sobre a coluna Observação para ver o texto completo em uma janela flutuante.'},
+      {icon:'🎨', cor:'amber', titulo:'Cores por Status', texto:'Linhas coloridas indicam o status: azul (intimação), amarelo (prazo próximo), vermelho (prazo vencido).'},
+      {icon:'☰', cor:'green', titulo:'Menu Recolhível', texto:'Em telas menores o menu lateral pode ser ocultado clicando no ícone ☰ no canto superior.'},
+      {icon:'↔️', cor:'blue', titulo:'Scroll Automático', texto:'Aproxime o mouse das bordas da tabela para rolar automaticamente para os lados.'}
+    ];
+
+    function verificarNovidades(){
+      var visto=localStorage.getItem(NOVIDADES_KEY);
+      if(visto===VERSAO_SISTEMA) return;
+      // Monta conteúdo
+      var html='';
+      NOVIDADES.forEach(function(n){
+        html+='<div class="novidades-item">'+
+          '<div class="novidades-item__icon novidades-item__icon--'+n.cor+'">'+n.icon+'</div>'+
+          '<div class="novidades-item__text"><strong>'+n.titulo+'</strong><br>'+n.texto+'</div>'+
+        '</div>';
+      });
+      document.getElementById('novidadesBody').innerHTML=html;
+      document.getElementById('novidadesVersao').textContent='Versão '+VERSAO_SISTEMA;
+      document.getElementById('novidadesOverlay').classList.add('is-visible');
+    }
+
+    function fecharNovidades(){
+      localStorage.setItem(NOVIDADES_KEY, VERSAO_SISTEMA);
+      document.getElementById('novidadesOverlay').classList.remove('is-visible');
+    }
+
+    document.getElementById('novidadesOverlay').addEventListener('click',function(e){
+      if(e.target===this) fecharNovidades();
+    });
+    /* ═══ 1. CONTADOR DE URGÊNCIAS ═══ */
+    function atualizarBadgeUrgencias(){
+      var badge=document.getElementById('navBadge');
+      if(!badge) return;
+      var urgentes=dados.filter(function(d){
+        if(d.finalizado) return false;
+        // Intimações com prazo vencido ou ≤10 dias
+        if(d.intimacao && d.prazoPrazo){
+          var dias=diasParaPrazo(d.prazoPrazo);
+          if(dias!==null && dias<=10) return true;
+        }
+        // Conferências não feitas ou >10 dias
+        if(!d.confData) return true;
+        var diasConf=diasParaPrazo(d.confData);
+        if(diasConf!==null && -diasConf>10) return true;
+        return false;
+      }).length;
+      badge.textContent=urgentes>0?'⚠ '+urgentes:dados.length;
+      badge.className='nav-item__badge'+(urgentes>0?' nav-item__badge--urgente':'');
+      // Badge apenas informativo
+      badge.style.cursor='default';
+      badge.onclick=null;
+    }
+
+    /* ═══ 2. STATUS ONLINE/OFFLINE ═══ */
+    function atualizarStatus(estado, mensagem){
+      var bar=document.getElementById('statusBar');
+      var txt=document.getElementById('statusText');
+      var sync=document.getElementById('statusSync');
+      if(!bar||!txt) return;
+      bar.className='status-bar status-bar--'+estado;
+      txt.textContent=estado==='online'?'Online':estado==='syncing'?'Sincronizando...':'Offline';
+      if(mensagem && sync) sync.textContent=mensagem;
+    }
+
+    window.addEventListener('online', function(){ atualizarStatus('online',''); });
+    window.addEventListener('offline', function(){ atualizarStatus('offline','Sem conexão'); });
+
+    // Intercepta restaurarDoDrive para mostrar status de sync
+    var _restaurarDoDrive=restaurarDoDrive;
+    restaurarDoDrive=function(){
+      atualizarStatus('syncing','');
+      var d=new Date();
+      var hora=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');
+      _restaurarDoDrive();
+      setTimeout(function(){
+        atualizarStatus('online','Sync '+hora);
+      }, 3000);
+    };
+
+    /* ═══ 3. NOME CONFIGURÁVEL ═══ */
+    var NOME_KEY='nsa_usuario_nome';
+
+    function carregarNome(){
+      var nome=localStorage.getItem(NOME_KEY)||'';
+      var elNome=document.getElementById('userName');
+      var elAvatar=document.getElementById('userAvatar');
+      var elTopbar=document.getElementById('topbarTitle');
+      if(nome){
+        if(elNome) elNome.textContent=nome;
+        if(elAvatar) elAvatar.textContent=nome.charAt(0).toUpperCase();
+        if(elTopbar){
+          var h=new Date().getHours();
+          var s=h<12?'Bom dia':h<18?'Boa tarde':'Boa noite';
+          elTopbar.textContent=s+', '+nome+'! 👋';
+        }
+      } else {
+        if(elNome) elNome.textContent='Clique para configurar';
+        if(elAvatar) elAvatar.textContent='?';
+      }
+    }
+
+    function editarNome(){
+      var atual=localStorage.getItem(NOME_KEY)||'';
+      var novo=prompt('Seu nome ou identificação:\n(aparecerá no menu e na saudação)',atual);
+      if(novo===null) return;
+      novo=novo.trim();
+      if(novo){
+        localStorage.setItem(NOME_KEY, novo);
+        carregarNome();
+        showToast('Nome atualizado! 👋','success');
+      }
+    }
+
+    // Inicializar
+    carregarNome();
+    atualizarStatus(navigator.onLine?'online':'offline','');
   </script>
 </body>
 </html>
