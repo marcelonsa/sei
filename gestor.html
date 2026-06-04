@@ -401,6 +401,28 @@
     .obs-cell{max-width:140px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--gray-600);font-size:11px;cursor:help;position:relative}
     .obs-empty{color:var(--gray-300);font-style:italic;font-size:11px}
 
+    /* ═══ MODAL PDF SEI ═══ */
+    .sei-pdf-overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(4px);z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
+    .sei-pdf-overlay.is-visible{opacity:1;pointer-events:auto}
+    .sei-pdf-modal{background:#fff;border-radius:16px;width:500px;max-width:95vw;box-shadow:0 24px 60px rgba(0,0,0,0.2);overflow:hidden}
+    .sei-pdf-head{padding:20px 24px 16px;background:linear-gradient(135deg,#0f2744,#1d6fa4);display:flex;align-items:center;gap:12px}
+    .sei-pdf-head__icon{font-size:28px}
+    .sei-pdf-head__info{flex:1}
+    .sei-pdf-head__title{font-size:15px;font-weight:700;color:#fff}
+    .sei-pdf-head__sub{font-size:12px;color:#93c5fd;margin-top:2px}
+    .sei-pdf-body{padding:20px 24px}
+    .sei-pdf-drop{border:2px dashed var(--gray-300);border-radius:12px;padding:32px;text-align:center;cursor:pointer;transition:all var(--t);background:var(--gray-50)}
+    .sei-pdf-drop:hover,.sei-pdf-drop.dragover{border-color:var(--blue-400);background:var(--blue-50)}
+    .sei-pdf-drop__icon{font-size:32px;margin-bottom:8px}
+    .sei-pdf-drop__text{font-size:13px;font-weight:600;color:var(--gray-600)}
+    .sei-pdf-drop__sub{font-size:11px;color:var(--gray-400);margin-top:4px}
+    .sei-pdf-result{margin-top:16px;padding:14px;border-radius:10px;font-size:12px;line-height:1.8;display:none}
+    .sei-pdf-result--ok{background:#F0FDF4;border:1px solid #86EFAC;color:#166534}
+    .sei-pdf-result--warn{background:#FEF9C3;border:1px solid #FDE047;color:#854D0E}
+    .sei-pdf-result--err{background:#FEF2F2;border:1px solid #FCA5A5;color:#991B1B}
+    .sei-pdf-footer{padding:12px 24px 20px;display:flex;gap:8px;justify-content:flex-end}
+    .action-btn--pdf:hover{color:#7c3aed;background:#F5F3FF}
+
     /* ═══ CONFERÊNCIA SEI ═══ */
     .conf-cell{text-align:center;white-space:nowrap;min-width:130px}
     .conf-btn{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;font-size:11px;font-weight:600;border:none;border-radius:999px;cursor:pointer;transition:all var(--t);white-space:nowrap}
@@ -892,6 +914,37 @@
         <button class="btn btn--primary" onclick="salvarConferencia()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:13px;height:13px"><polyline points="20 6 9 17 4 12"/></svg>
           Salvar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL PDF SEI -->
+  <div class="sei-pdf-overlay" id="modalPdfSei">
+    <div class="sei-pdf-modal">
+      <div class="sei-pdf-head">
+        <div class="sei-pdf-head__icon">📄</div>
+        <div class="sei-pdf-head__info">
+          <div class="sei-pdf-head__title">Importar PDF do SEI</div>
+          <div class="sei-pdf-head__sub" id="pdfSeiSub">Selecione o PDF gerado pelo SEI RJ</div>
+        </div>
+      </div>
+      <div class="sei-pdf-body">
+        <div class="sei-pdf-drop" id="pdfDrop" onclick="document.getElementById('pdfFileInput').click()"
+          ondragover="event.preventDefault();this.classList.add('dragover')"
+          ondragleave="this.classList.remove('dragover')"
+          ondrop="event.preventDefault();this.classList.remove('dragover');processarPdfSei(event.dataTransfer.files[0])">
+          <div class="sei-pdf-drop__icon">📂</div>
+          <div class="sei-pdf-drop__text">Clique ou arraste o PDF aqui</div>
+          <div class="sei-pdf-drop__sub">Arquivo gerado pelo SEI RJ (Acesso Externo)</div>
+        </div>
+        <input type="file" id="pdfFileInput" accept=".pdf" style="display:none" onchange="processarPdfSei(this.files[0])">
+        <div class="sei-pdf-result" id="pdfResult"></div>
+      </div>
+      <div class="sei-pdf-footer">
+        <button class="btn" onclick="fecharModalPdfSei()">Cancelar</button>
+        <button class="btn btn--primary" id="pdfAplicarBtn" onclick="aplicarDadosPdf()" style="display:none">
+          ✅ Aplicar ao registro
         </button>
       </div>
     </div>
@@ -1974,6 +2027,9 @@
           '<td>'+intimacaoHtml+'</td>'+
           '<td>'+confHtml+'</td>'+
           '<td class="td-actions"><div class="actions-group">'+
+            '<button class="action-btn action-btn--pdf" onclick="abrirModalPdfSei('+item.id+')" aria-label="Importar PDF SEI" title="Importar PDF SEI">'+
+              '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg>'+
+            '</button>'+
             '<button class="action-btn action-btn--edit" onclick="editarRegistro('+item.id+')" aria-label="Editar '+esc(item.razao)+'">'+
               '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>'+
             '</button>'+
@@ -2150,7 +2206,7 @@
 
     document.addEventListener('keydown', function(e){
       if(e.key==='Escape'){
-        ['modalForm','modalBkp','modalRest','modalConferencia'].forEach(function(id){
+        ['modalForm','modalBkp','modalRest','modalConferencia','modalPdfSei'].forEach(function(id){
           document.getElementById(id).classList.remove('is-visible');
         });
         fecharConfModal();
@@ -2973,6 +3029,173 @@
     }
     carregarNome();
     atualizarStatus(navigator.onLine?'online':'offline','');
+    /* ═══ IMPORTAR PDF SEI ═══ */
+    var pdfSeiIdAtual=null;
+    var pdfDadosExtraidos=null;
+
+    function abrirModalPdfSei(id){
+      pdfSeiIdAtual=id;
+      pdfDadosExtraidos=null;
+      var item=dados.find(function(d){return d.id===id;});
+      document.getElementById('pdfSeiSub').textContent=item?item.razao:'Registro';
+      document.getElementById('pdfResult').style.display='none';
+      document.getElementById('pdfResult').className='sei-pdf-result';
+      document.getElementById('pdfAplicarBtn').style.display='none';
+      document.getElementById('pdfFileInput').value='';
+      document.getElementById('modalPdfSei').classList.add('is-visible');
+    }
+
+    function fecharModalPdfSei(){
+      document.getElementById('modalPdfSei').classList.remove('is-visible');
+      pdfSeiIdAtual=null;
+      pdfDadosExtraidos=null;
+    }
+
+    function processarPdfSei(file){
+      if(!file || file.type!=='application/pdf'){
+        mostrarResultadoPdf('err','❌ Arquivo inválido. Selecione um PDF do SEI RJ.');
+        return;
+      }
+      mostrarResultadoPdf('ok','⏳ Lendo PDF...');
+      var reader=new FileReader();
+      reader.onload=function(e){
+        extrairTextoPdf(e.target.result);
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    function carregarPdfJs(callback){
+      if(window.pdfjsLib){ callback(); return; }
+      var s=document.createElement('script');
+      s.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+      s.onload=function(){
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        callback();
+      };
+      document.head.appendChild(s);
+    }
+
+    function extrairTextoPdf(arrayBuffer){
+      carregarPdfJs(function(){
+        var loadingTask=pdfjsLib.getDocument({data:arrayBuffer});
+        loadingTask.promise.then(function(pdf){
+          var totalPages=pdf.numPages;
+          var textoTotal='';
+          var pagesLoaded=0;
+          for(var i=1;i<=totalPages;i++){
+            pdf.getPage(i).then(function(page){
+              page.getTextContent().then(function(tc){
+                var texto=tc.items.map(function(x){return x.str;}).join(' ');
+                textoTotal+=texto+'\n';
+                pagesLoaded++;
+                if(pagesLoaded===totalPages){
+                  analisarTextoSei(textoTotal);
+                }
+              });
+            });
+          }
+        }).catch(function(){
+          mostrarResultadoPdf('err','❌ Não foi possível ler o PDF. Verifique se é um PDF válido do SEI RJ.');
+        });
+      });
+    }
+
+    function analisarTextoSei(texto){
+      try{
+        var resultado={};
+
+        // Extrai número do processo
+        var matchProc=texto.match(/Processo:\s*(SEI[-\s][\d\/]+)/i) ||
+                       texto.match(/(SEI[-\s]?\d{6}\/\d{6}\/\d{4})/i);
+        if(matchProc) resultado.processo=matchProc[1].trim();
+
+        // Extrai lista de andamentos - pega o primeiro (mais recente)
+        var idxAndamentos=texto.indexOf('Lista de Andamentos');
+        if(idxAndamentos>-1){
+          var textoAnd=texto.substring(idxAndamentos);
+          // Padrão: DD/MM/AAAA HH:MM UNIDADE Descrição
+          var matchAnd=textoAnd.match(/(\d{2}\/\d{2}\/\d{4})\s+\d{2}:\d{2}\s+(SEFAZ\/\S+)\s+([^\d][^]+?)(?=\d{2}\/\d{2}\/\d{4}|$)/);
+          if(matchAnd){
+            resultado.ultimaMovimentacao={
+              data: matchAnd[1],
+              descricao: matchAnd[3].replace(/\s+/g,' ').trim().substring(0,150)
+            };
+            resultado.unidadeAtual=matchAnd[2];
+
+            // Detecta status pela descrição
+            var desc=matchAnd[3].toLowerCase();
+            if(desc.indexOf('sobresta')>-1) resultado.status='Sobrestado';
+            else if(desc.indexOf('conclus')>-1) resultado.status='Concluso';
+            else if(desc.indexOf('arquiv')>-1) resultado.status='Arquivado';
+            else if(desc.indexOf('intimaç')>-1||desc.indexOf('intima')>-1) resultado.status='Com Intimação';
+            else if(desc.indexOf('remetido')>-1) resultado.status='Em tramitação';
+            else if(desc.indexOf('recebido')>-1) resultado.status='Recebido na unidade';
+            else resultado.status='Em andamento';
+          }
+        }
+
+        if(!resultado.ultimaMovimentacao){
+          mostrarResultadoPdf('err','❌ Não foi possível identificar os andamentos. Verifique se o PDF é do tipo "Acesso Externo com Acompanhamento Integral".');
+          return;
+        }
+
+        pdfDadosExtraidos=resultado;
+        exibirResultadoPdf(resultado);
+      }catch(e){
+        mostrarResultadoPdf('err','❌ Erro ao analisar o PDF: '+e.message);
+      }
+    }
+
+    function exibirResultadoPdf(d){
+      var item=dados.find(function(x){return x.id===pdfSeiIdAtual;});
+      var obsAtual=item?item.observacao||'':'';
+
+      var jaExiste=d.ultimaMovimentacao && obsAtual &&
+        obsAtual.indexOf(d.ultimaMovimentacao.data)>-1 &&
+        obsAtual.indexOf(d.ultimaMovimentacao.descricao.substring(0,20))>-1;
+
+      var html='';
+      if(d.processo) html+='<div>📋 <strong>Processo:</strong> '+esc(d.processo)+'</div>';
+      if(d.ultimaMovimentacao) html+='<div>📅 <strong>Última movimentação:</strong> '+esc(d.ultimaMovimentacao.data)+' — '+esc(d.ultimaMovimentacao.descricao)+'</div>';
+      if(d.status) html+='<div>🔵 <strong>Status:</strong> '+esc(d.status)+'</div>';
+      if(d.unidadeAtual) html+='<div>🏢 <strong>Unidade:</strong> '+esc(d.unidadeAtual)+'</div>';
+
+      if(jaExiste){
+        html+='<hr style="margin:8px 0;border:none;border-top:1px solid #FDE047"><div>⚠️ <strong>Sem movimentação nova</strong> — Esta informação já está registrada na observação.</div>';
+        mostrarResultadoPdf('warn',html);
+        document.getElementById('pdfAplicarBtn').style.display='none';
+      } else {
+        mostrarResultadoPdf('ok',html);
+        document.getElementById('pdfAplicarBtn').style.display='flex';
+      }
+    }
+
+    function mostrarResultadoPdf(tipo, html){
+      var el=document.getElementById('pdfResult');
+      el.className='sei-pdf-result sei-pdf-result--'+tipo;
+      el.innerHTML=html;
+      el.style.display='block';
+    }
+
+    function aplicarDadosPdf(){
+      if(!pdfDadosExtraidos||!pdfSeiIdAtual) return;
+      var item=dados.find(function(d){return d.id===pdfSeiIdAtual;});
+      if(!item) return;
+      var d=pdfDadosExtraidos;
+      var novaInfo='['+new Date().toLocaleDateString('pt-BR')+'] PDF SEI — ';
+      if(d.ultimaMovimentacao) novaInfo+='Última mov. '+d.ultimaMovimentacao.data+': '+d.ultimaMovimentacao.descricao+'. ';
+      if(d.status) novaInfo+='Status: '+d.status+'. ';
+      if(d.unidadeAtual) novaInfo+='Unidade: '+d.unidadeAtual+'.';
+      item.observacao=(item.observacao?item.observacao+'\n':'')+novaInfo.trim();
+      salvarStorage();
+      renderTabela();
+      fecharModalPdfSei();
+      showToast('✅ Observação atualizada com dados do SEI!','success');
+    }
+
+    document.getElementById('modalPdfSei').addEventListener('click',function(e){
+      if(e.target===this) fecharModalPdfSei();
+    });
   </script>
 </body>
 </html>
