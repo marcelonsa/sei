@@ -1848,11 +1848,10 @@
       });
 
       document.getElementById('recordPill').querySelector('span').textContent = filtrados.length + ' registro'+(filtrados.length!==1?'s':'');
-      var badge=document.getElementById('navBadge');
-      if(badge.textContent !== dados.length.toString()){
-        badge.textContent=dados.length;
-        badge.classList.add('bump');
-        setTimeout(function(){badge.classList.remove('bump');},300);
+      if(typeof atualizarBadgeUrgencias==='function') atualizarBadgeUrgencias();
+      else {
+        var badge=document.getElementById('navBadge');
+        if(badge) badge.textContent=dados.length;
       }
 
       if(filtrados.length===0){
