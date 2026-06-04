@@ -36,10 +36,10 @@
       --r-sm:6px; --r-md:10px; --r-lg:14px; --r-xl:20px; --t:.15s ease;
     }
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:var(--font);background:#0B1929;color:var(--gray-800);min-height:100vh;display:flex;overflow-x:hidden}
+    body{font-family:var(--font);background:#0B1929;color:var(--gray-800);min-height:100vh;display:flex}
 
     /* ═══ SIDEBAR ═══ */
-    .sidebar{width:220px;min-height:100vh;background:var(--blue-950);display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;bottom:0;z-index:50;border-right:1px solid rgba(255,255,255,0.06)}
+    .sidebar{width:220px;min-height:100vh;background:var(--blue-950);display:flex;flex-direction:column;flex-shrink:0;position:fixed;top:0;left:0;bottom:0;z-index:50;border-right:1px solid rgba(255,255,255,0.06);overflow-y:auto;overflow-x:hidden}
     .sidebar__brand{padding:24px 20px 20px;border-bottom:1px solid rgba(255,255,255,0.07)}
     .brand-logo{display:flex;align-items:center;gap:12px}
     .brand-logo__icon{width:44px;height:44px;border-radius:var(--r-md);background:linear-gradient(135deg,var(--blue-600),var(--blue-400));display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 12px rgba(24,95,165,0.5)}
@@ -92,7 +92,7 @@
     .drive-alert__dismiss svg{width:14px;height:14px}
 
     /* ═══ MAIN ═══ */
-    .main-area{margin-left:220px;flex:1;display:flex;flex-direction:column;min-height:100vh;background:#F0F4F9}
+    .main-area{margin-left:220px;flex:1;display:flex;flex-direction:column;min-height:100vh;background:#F0F4F9;min-width:0}
     .topbar{background:#fff;border-bottom:1px solid var(--gray-200);padding:10px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:40}
     .topbar__title{font-size:18px;font-weight:700;color:var(--gray-900);letter-spacing:-.02em}
     .topbar__sub{font-size:12px;color:var(--gray-500);margin-top:1px}
@@ -210,7 +210,7 @@
     .finalizado-filter__count{font-size:11px;font-weight:700;line-height:1;color:inherit;opacity:.8}
 
     /* ═══ TABLE CARD ═══ */
-    .table-card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--r-xl);overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+    .table-card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--r-xl);overflow:visible;box-shadow:0 1px 4px rgba(0,0,0,.04)}
     .table-toolbar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;padding:16px 20px;border-bottom:1px solid var(--gray-100)}
     .toolbar-left{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
     .search-wrap{position:relative}
@@ -408,20 +408,19 @@
     .status-dot--done{background:var(--green-500)}
     .btn-link-reset{border:none;background:transparent;padding:0}
     .stat-link button{font:inherit;color:inherit;border:0;background:transparent;padding:0;cursor:pointer}
-    @media (max-width:900px){
-      .sidebar{position:static;width:100%;min-height:auto;flex-direction:row;flex-wrap:wrap}
-      .sidebar__brand{padding:12px 16px;flex:1}
-      .sidebar__illustration{display:none}
-      .sidebar__nav{padding:8px;width:100%;display:flex;flex-wrap:wrap;gap:4px}
-      .sidebar__footer{display:none}
-      .nav-item{padding:6px 10px;font-size:11px}
-      .drive-card{display:none}
-      body{display:block;overflow-x:hidden}
-      .main-area{margin-left:0}
-      .topbar{position:static;flex-direction:column;align-items:flex-start;gap:8px;padding:10px 12px}
-      .topbar__right{width:100%;flex-wrap:wrap;gap:6px}
+    .sidebar-toggle{display:none;position:fixed;top:10px;left:10px;z-index:100;width:36px;height:36px;border-radius:8px;background:var(--blue-950);border:1px solid rgba(255,255,255,0.15);color:#fff;cursor:pointer;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,0.3)}
+    .sidebar-toggle svg{width:18px;height:18px}
+    .sidebar.collapsed{transform:translateX(-220px)}
+    .main-area.expanded{margin-left:0}
+
+    @media (max-width:960px){
+      .sidebar-toggle{display:flex}
+      .sidebar{transform:translateX(-220px);transition:transform .25s ease}
+      .sidebar.open{transform:translateX(0)}
+      .main-area{margin-left:0;transition:margin-left .25s ease}
+      .topbar{padding:10px 12px 10px 56px}
       .content{padding:12px}
-      .hero-banner{align-items:flex-start;padding:16px;margin-bottom:16px}
+      .hero-banner{padding:16px;margin-bottom:16px}
       .hero-banner__illus{display:none}
       .hero-banner__title{font-size:18px}
       .stats-grid{grid-template-columns:1fr 1fr;gap:10px}
@@ -433,24 +432,24 @@
       .finalizado-filter-bar{flex-wrap:wrap;gap:4px}
       .intimacao-filter-bar{flex-wrap:wrap;gap:4px}
       .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
-      .table-card table{min-width:900px}
       .drive-alert{flex-wrap:wrap;gap:8px;padding:8px 12px;font-size:12px}
       .backup-alert{flex-wrap:wrap;gap:8px;padding:8px 12px;font-size:12px}
     }
     @media (max-width:600px){
       .stats-grid{grid-template-columns:1fr}
-      .hero-banner__title{font-size:16px}
-      .topbar__title{font-size:15px}
-      .stat-card{padding:10px}
+      .hero-banner__title{font-size:15px}
+      .topbar__title{font-size:14px}
       .content{padding:8px}
-      .hero-banner{padding:12px}
-      .filter-btn{font-size:10px;padding:4px 8px}
     }
   </style>
 </head>
 <body>
 
-  <aside class="sidebar">
+  <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" aria-label="Menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+
+  <aside class="sidebar" id="sidebar">
     <div class="sidebar__brand">
       <div class="brand-logo">
         <div class="brand-logo__icon">
@@ -2538,6 +2537,19 @@
         if(obsTooltipEl) obsTooltipEl.classList.remove('visible');
       },200);
     }
+    /* ═══ SIDEBAR TOGGLE ═══ */
+    function toggleSidebar(){
+      var sidebar=document.getElementById('sidebar');
+      sidebar.classList.toggle('open');
+    }
+    // Fechar sidebar ao clicar fora
+    document.addEventListener('click', function(e){
+      var sidebar=document.getElementById('sidebar');
+      var toggle=document.getElementById('sidebarToggle');
+      if(sidebar && toggle && !sidebar.contains(e.target) && !toggle.contains(e.target)){
+        sidebar.classList.remove('open');
+      }
+    });
   </script>
 </body>
 </html>
