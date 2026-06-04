@@ -81,33 +81,6 @@
     .drive-alert__dismiss{background:none;border:none;cursor:pointer;color:#60a5fa;padding:4px;border-radius:4px;display:flex;align-items:center}
     .drive-alert__dismiss svg{width:14px;height:14px}
 
-    /* ═══ BANNER ATUALIZAÇÃO ═══ */
-    .versao-alert{display:none;align-items:center;gap:12px;padding:10px 18px;background:linear-gradient(90deg,#1a3a2f,#14291f);border-bottom:1px solid rgba(34,197,94,.3);font-size:13px;color:#86efac;font-weight:500}
-    .versao-alert.is-visible{display:flex}
-    .versao-alert svg{width:16px;height:16px;flex-shrink:0;color:#4ade80}
-    .versao-alert__info{flex:1}
-    .versao-alert__title{font-weight:700;color:#4ade80}
-    .versao-alert__desc{font-size:11px;color:#86efac;opacity:.8}
-    .versao-alert__btn{padding:5px 12px;font-size:12px;font-weight:600;background:#16a34a;color:#fff;border:none;border-radius:var(--r-sm);cursor:pointer;transition:background var(--t);white-space:nowrap}
-    .versao-alert__btn:hover{background:#15803d}
-    .versao-alert__dismiss{background:none;border:none;cursor:pointer;color:#4ade80;padding:4px;border-radius:4px;display:flex;align-items:center}
-    .versao-alert__dismiss svg{width:14px;height:14px}
-    .update-modal-overlay{position:fixed;inset:0;background:rgba(15,23,42,.55);backdrop-filter:blur(4px);z-index:2000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s}
-    .update-modal-overlay.is-visible{opacity:1;pointer-events:auto}
-    .update-modal{background:#fff;border-radius:16px;width:440px;max-width:95vw;box-shadow:0 24px 60px rgba(0,0,0,0.2);overflow:hidden}
-    .update-modal__head{padding:24px 28px 16px;background:linear-gradient(135deg,#14532d,#166534);text-align:center}
-    .update-modal__icon{font-size:36px;margin-bottom:8px}
-    .update-modal__title{font-size:16px;font-weight:700;color:#fff}
-    .update-modal__sub{font-size:12px;color:#86efac;margin-top:4px}
-    .update-modal__body{padding:20px 28px;display:flex;flex-direction:column;gap:12px}
-    .update-modal__ver{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--gray-50);border-radius:8px;border:1px solid var(--gray-200);font-size:12px}
-    .update-modal__ver-label{color:var(--gray-500);font-weight:600}
-    .update-modal__ver-val{color:var(--gray-800);font-weight:700}
-    .update-modal__desc{font-size:13px;color:var(--gray-700);line-height:1.6}
-    .update-modal__footer{padding:12px 28px 20px;display:flex;gap:10px;justify-content:flex-end}
-    .update-progress{height:4px;background:var(--gray-100);border-radius:999px;overflow:hidden;margin-top:4px}
-    .update-progress__bar{height:100%;background:linear-gradient(90deg,#16a34a,#4ade80);width:0%;transition:width .3s;border-radius:999px}
-
     /* ═══ MAIN ═══ */
     .main-area{margin-left:220px;flex:1;display:flex;flex-direction:column;min-height:100vh;background:#F0F4F9}
     .topbar{background:#fff;border-bottom:1px solid var(--gray-200);padding:10px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:40}
@@ -555,51 +528,6 @@
       <button class="drive-alert__dismiss" onclick="document.getElementById('driveAlert').classList.remove('is-visible')" aria-label="Fechar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
-    </div>
-
-    <!-- BANNER NOVA VERSÃO -->
-    <div class="versao-alert" id="versaoAlert" role="alert">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.18-3.36"/></svg>
-      <div class="versao-alert__info">
-        <div class="versao-alert__title">🚀 Nova versão disponível!</div>
-        <div class="versao-alert__desc" id="versaoAlertDesc">Uma atualização do sistema está disponível.</div>
-      </div>
-      <button class="versao-alert__btn" onclick="abrirModalAtualizacao()">Ver atualização</button>
-      <button class="versao-alert__dismiss" onclick="document.getElementById('versaoAlert').classList.remove('is-visible')" aria-label="Fechar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>
-    </div>
-    <!-- MODAL ATUALIZAÇÃO -->
-    <div class="update-modal-overlay" id="modalAtualizacao">
-      <div class="update-modal">
-        <div class="update-modal__head">
-          <div class="update-modal__icon">🚀</div>
-          <div class="update-modal__title">Nova versão disponível</div>
-          <div class="update-modal__sub">Sistema de Gestão SEI — Gestor</div>
-        </div>
-        <div class="update-modal__body">
-          <div class="update-modal__ver">
-            <span class="update-modal__ver-label">Versão atual</span>
-            <span class="update-modal__ver-val" id="updateVersaoAtual">—</span>
-          </div>
-          <div class="update-modal__ver">
-            <span class="update-modal__ver-label">Nova versão</span>
-            <span class="update-modal__ver-val" id="updateVersaoNova" style="color:#16a34a">—</span>
-          </div>
-          <div class="update-modal__desc" id="updateDescricao" style="margin-top:4px"></div>
-          <div class="update-progress" id="updateProgress" style="display:none">
-            <div class="update-progress__bar" id="updateProgressBar"></div>
-          </div>
-          <div id="updateStatus" style="font-size:12px;color:var(--gray-500);text-align:center;display:none"></div>
-        </div>
-        <div class="update-modal__footer">
-          <button class="btn" onclick="fecharModalAtualizacao()">Agora não</button>
-          <button class="btn btn--primary" id="updateBtn" onclick="baixarAtualizacao('gestor')" style="background:#16a34a;border-color:#16a34a">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="width:13px;height:13px"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.18-3.36"/></svg>
-            Baixar atualização
-          </button>
-        </div>
-      </div>
     </div>
     <div class="backup-alert" id="backupAlert" role="alert">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -1620,7 +1548,6 @@
               "observacao": ""
       }
 
-
     ];
 
     var TIPO_CORES = {
@@ -2105,7 +2032,6 @@
 
       var comSei=dados.filter(function(d){return !!d.sei;}).length;
       document.getElementById('statSei').textContent=tot>0 ? Math.round((comSei/tot)*100)+'%' : '0%';
-
 
       var bkpEl=document.getElementById('statUltimoBkp');
       if(historicoBkp.length>0){
@@ -2903,83 +2829,6 @@
 
     document.getElementById('modalConferencia').addEventListener('click', function(e){
       if(e.target===this) fecharConfModal();
-    });
-
-    /* ═══ SISTEMA DE VERSÃO ═══ */
-    var VERSAO_ATUAL='1.1'; /* desc: Logo GPTW adicionado ao menu */
-    var VERSAO_KEY='nsa_versao_gestor';
-    var versaoRemota=null;
-
-    function verificarVersao(){
-      fetch(APPS_SCRIPT_URL+'?acao=versao_gestor')
-        .then(function(r){ return r.json(); })
-        .then(function(v){
-          versaoRemota=v;
-          var versaoSalva=localStorage.getItem(VERSAO_KEY)||VERSAO_ATUAL;
-          var novaVersao=v.versao||'1.0';
-          if(novaVersao!==versaoSalva){
-            document.getElementById('versaoAlertDesc').textContent=
-              'Versão '+novaVersao+' — '+(v.descricao||'Melhorias no sistema');
-            document.getElementById('versaoAlert').classList.add('is-visible');
-          }
-        })
-        .catch(function(){/* silencioso */});
-    }
-
-    function abrirModalAtualizacao(){
-      if(!versaoRemota) return;
-      var versaoSalva=localStorage.getItem(VERSAO_KEY)||VERSAO_ATUAL;
-      document.getElementById('updateVersaoAtual').textContent=versaoSalva;
-      document.getElementById('updateVersaoNova').textContent=versaoRemota.versao||'—';
-      document.getElementById('updateDescricao').textContent=versaoRemota.descricao||'';
-      document.getElementById('updateProgress').style.display='none';
-      document.getElementById('updateStatus').style.display='none';
-      document.getElementById('updateBtn').disabled=false;
-      document.getElementById('updateBtn').textContent='Baixar atualização';
-      document.getElementById('modalAtualizacao').classList.add('is-visible');
-    }
-
-    function fecharModalAtualizacao(){
-      document.getElementById('modalAtualizacao').classList.remove('is-visible');
-    }
-
-    function baixarAtualizacao(tipo){
-      var btn=document.getElementById('updateBtn');
-      var progress=document.getElementById('updateProgress');
-      var status=document.getElementById('updateStatus');
-      btn.disabled=true; btn.textContent='Baixando...';
-      progress.style.display='block'; status.style.display='block';
-      status.textContent='Buscando arquivo no servidor...';
-      var bar=document.getElementById('updateProgressBar');
-      var pct=0;
-      var timer=setInterval(function(){ pct=Math.min(pct+8,85); bar.style.width=pct+'%'; },200);
-      fetch(APPS_SCRIPT_URL+'?acao='+tipo)
-        .then(function(r){ if(!r.ok) throw new Error('HTTP '+r.status); return r.text(); })
-        .then(function(html){
-          clearInterval(timer); bar.style.width='100%';
-          status.textContent='Preparando download...';
-          if(versaoRemota) localStorage.setItem(VERSAO_KEY, versaoRemota.versao||VERSAO_ATUAL);
-          var blob=new Blob([html],{type:'text/html'});
-          var url=URL.createObjectURL(blob);
-          var a=document.createElement('a');
-          a.href=url; a.download=tipo+'.html';
-          document.body.appendChild(a); a.click();
-          setTimeout(function(){ URL.revokeObjectURL(url); document.body.removeChild(a); },1000);
-          status.textContent='✅ Download concluído! Substitua o arquivo atual por este.';
-          btn.textContent='✅ Baixado!';
-          document.getElementById('versaoAlert').classList.remove('is-visible');
-          setTimeout(function(){ fecharModalAtualizacao(); },2500);
-        })
-        .catch(function(){
-          clearInterval(timer);
-          status.textContent='❌ Erro ao baixar. Tente novamente.';
-          status.style.color='#dc2626';
-          btn.disabled=false; btn.textContent='Tentar novamente';
-        });
-    }
-
-    document.getElementById('modalAtualizacao').addEventListener('click',function(e){
-      if(e.target===this) fecharModalAtualizacao();
     });
   </script>
 </body>
