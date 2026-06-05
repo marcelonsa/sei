@@ -1916,7 +1916,7 @@
       }
       var abaDash=document.getElementById('abaDashboard');
       if(abaDash && abaDash.style.display!=='none' && typeof atualizarDashboard==='function'){
-        atualizarDashboard(filtrados);
+        atualizarDashboard(filtrados, false);
       }
 
       if(filtrados.length===0){
@@ -2125,6 +2125,7 @@
         }
       }
       if(typeof atualizarBadgeUrgencias==='function') atualizarBadgeUrgencias();
+      if(typeof atualizarDashboard==='function') atualizarDashboard(dados, true);
     }
 
     function maisFrequente(obj){
@@ -2949,12 +2950,12 @@
       document.head.appendChild(s);
     }
 
-    function atualizarDashboard(dadosFiltrados){
+    function atualizarDashboard(dadosFiltrados, animar){
       var base=dadosFiltrados||dados;
       var total=base.length;
       var totalGeral=dados.length;
       var finalizado=base.filter(function(d){return !!d.finalizado;}).length;
-      var pendente=total-finalizado;
+      var pendente=base.filter(function(d){return !d.finalizado;}).length;
       var intimacoes=base.filter(function(d){return !!d.intimacao && !d.finalizado;}).length;
       var intimUrgentes=base.filter(function(d){
         if(d.finalizado||!d.intimacao||!d.prazoPrazo) return false;
@@ -2970,7 +2971,7 @@
       if(el('dashPendentePct')) el('dashPendentePct').textContent=total>0?Math.round(pendente/total*100)+'%'+(filtroAtivo?' (filtro)':' do total'):'—';
       if(el('dashIntimacao')) el('dashIntimacao').textContent=intimacoes;
       if(el('dashIntimacaoUrgente')) el('dashIntimacaoUrgente').textContent=intimUrgentes>0?'⚠ '+intimUrgentes+' com prazo urgente':'Nenhuma urgência';
-      if(typeof animarContadores==='function') animarContadores();
+      if(animar && typeof animarContadores==='function') animarContadores();
       renderizarUrgencias(base);
       carregarChartJs(function(){ renderizarGraficos(base); });
     }
