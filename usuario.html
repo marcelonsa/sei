@@ -181,7 +181,67 @@
     .content{padding:16px 18px;flex:1;min-width:0}
 
     /* ═══ STATS ═══ */
-    .stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:24px}
+    /* ═══ SPLASH SCREEN ═══ */
+    #splash{position:fixed;inset:0;background:linear-gradient(135deg,#0a1628 0%,#0f2744 50%,#1a3a5c 100%);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;transition:opacity .6s ease,transform .6s ease}
+    #splash.hide{opacity:0;pointer-events:none;transform:scale(1.02)}
+    .splash-logo{font-size:52px;font-weight:900;letter-spacing:-.04em;color:#fff;display:flex;flex-direction:column;align-items:center;gap:4px}
+    .splash-logo span{font-size:18px;font-weight:600;color:#4db8ff;letter-spacing:.1em;text-transform:uppercase}
+    .splash-bar-wrap{width:220px;height:4px;background:rgba(255,255,255,.1);border-radius:999px;overflow:hidden}
+    .splash-bar{height:100%;background:linear-gradient(90deg,#2563eb,#4db8ff);border-radius:999px;width:0%;transition:width .05s linear}
+    .splash-text{font-size:13px;color:rgba(255,255,255,.5);letter-spacing:.06em}
+    .splash-dots span{display:inline-block;width:6px;height:6px;border-radius:50%;background:#4db8ff;margin:0 3px;animation:dot-bounce .8s ease-in-out infinite}
+    .splash-dots span:nth-child(2){animation-delay:.15s}
+    .splash-dots span:nth-child(3){animation-delay:.3s}
+    @keyframes dot-bounce{0%,80%,100%{transform:translateY(0);opacity:.4}40%{transform:translateY(-8px);opacity:1}}
+
+    /* ═══ ANIMAÇÕES DE ENTRADA ═══ */
+    @keyframes fadeSlideUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeSlideIn{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+    @keyframes scaleIn{from{opacity:0;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
+    @keyframes countUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+    .anim-slide-up{opacity:0;animation:fadeSlideUp .55s cubic-bezier(.22,1,.36,1) forwards}
+    .anim-scale-in{opacity:0;animation:scaleIn .5s cubic-bezier(.22,1,.36,1) forwards}
+
+    /* Delays em cascata para os KPIs */
+    .dash-kpi:nth-child(1){opacity:0;animation:fadeSlideUp .5s .1s cubic-bezier(.22,1,.36,1) forwards}
+    .dash-kpi:nth-child(2){opacity:0;animation:fadeSlideUp .5s .22s cubic-bezier(.22,1,.36,1) forwards}
+    .dash-kpi:nth-child(3){opacity:0;animation:fadeSlideUp .5s .34s cubic-bezier(.22,1,.36,1) forwards}
+    .dash-kpi:nth-child(4){opacity:0;animation:fadeSlideUp .5s .46s cubic-bezier(.22,1,.36,1) forwards}
+
+    .dash-chart-card:nth-child(1){opacity:0;animation:scaleIn .55s .55s cubic-bezier(.22,1,.36,1) forwards}
+    .dash-chart-card:nth-child(2){opacity:0;animation:scaleIn .55s .68s cubic-bezier(.22,1,.36,1) forwards}
+    .dash-chart-card:nth-child(3){opacity:0;animation:scaleIn .55s .8s cubic-bezier(.22,1,.36,1) forwards}
+
+    /* ═══ PARTÍCULAS HERO ═══ */
+    .hero-particles{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+    .particle{position:absolute;border-radius:50%;background:rgba(255,255,255,.15);animation:float linear infinite}
+    @keyframes float{0%{transform:translateY(100%) scale(0);opacity:0}10%{opacity:1}90%{opacity:.3}100%{transform:translateY(-120px) scale(1.2);opacity:0}}
+    .dash-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+    .dash-kpi{background:#fff;border:1px solid var(--gray-200);border-radius:var(--r-lg);padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04);position:relative;overflow:hidden;transition:box-shadow var(--t),transform var(--t)}
+    .dash-kpi:hover{box-shadow:0 4px 16px rgba(0,0,0,.08);transform:translateY(-2px)}
+    .dash-kpi__accent{position:absolute;top:0;left:0;right:0;height:3px;border-radius:var(--r-lg) var(--r-lg) 0 0}
+    .dash-kpi__label{font-size:11px;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+    .dash-kpi__value{font-size:32px;font-weight:800;color:var(--gray-900);letter-spacing:-.04em;line-height:1}
+    .dash-kpi__sub{font-size:11px;color:var(--gray-400);margin-top:6px;display:flex;align-items:center;gap:4px}
+    .dash-kpi__icon{position:absolute;right:16px;top:50%;transform:translateY(-50%);opacity:.08;font-size:48px}
+    .dash-charts{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+    .dash-chart-card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--r-lg);padding:20px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+    .dash-chart-card--wide{grid-column:1/-1}
+    .dash-chart-title{font-size:13px;font-weight:700;color:var(--gray-800);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+    .dash-chart-title svg{width:16px;height:16px;color:var(--blue-500)}
+    .dash-chart-wrap{position:relative;height:220px}
+    .dash-chart-wrap--tall{height:260px}
+    .dash-insp-list{display:flex;flex-direction:column;gap:8px;max-height:220px;overflow-y:auto}
+    .dash-insp-item{display:flex;align-items:center;gap:10px;font-size:12px}
+    .dash-insp-item__name{flex:1;color:var(--gray-700);font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .dash-insp-item__bar-wrap{width:120px;height:8px;background:var(--gray-100);border-radius:999px;overflow:hidden;flex-shrink:0}
+    .dash-insp-item__bar{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--blue-600),var(--blue-400))}
+    .dash-insp-item__count{font-weight:700;color:var(--gray-800);min-width:24px;text-align:right}
+    @media(max-width:960px){.dash-grid{grid-template-columns:1fr 1fr}.dash-charts{grid-template-columns:1fr}}
+    @media(max-width:600px){.dash-grid{grid-template-columns:1fr}}
+
+    /* ═══ STATS GRID ═══ */
     .stat-card{background:#fff;border:1px solid var(--gray-200);border-radius:var(--r-lg);padding:18px 20px;display:flex;align-items:flex-start;gap:14px;box-shadow:0 1px 3px rgba(0,0,0,.04);transition:box-shadow var(--t),transform var(--t);cursor:default}
     .stat-card:hover{box-shadow:0 4px 16px rgba(0,0,0,.08);transform:translateY(-2px)}
     .stat-card__icon{width:44px;height:44px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -485,6 +545,21 @@
 </head>
 <body>
 
+  <!-- SPLASH SCREEN -->
+  <div id="splash">
+    <div class="splash-logo">
+      <div style="background:linear-gradient(135deg,#2563eb,#4db8ff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">SEI</div>
+      <span>NSA Contabilidade</span>
+    </div>
+    <div class="splash-dots">
+      <span></span><span></span><span></span>
+    </div>
+    <div class="splash-bar-wrap">
+      <div class="splash-bar" id="splashBar"></div>
+    </div>
+    <div class="splash-text" id="splashText">Carregando sistema...</div>
+  </div>
+
   <button class="sidebar-toggle" id="sidebarToggle" onclick="toggleSidebar()" aria-label="Menu">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
   </button>
@@ -515,11 +590,17 @@
 
     <nav class="sidebar__nav">
       <div class="nav-label">Menu Principal</div>
-      <button class="nav-item active">
+      <button class="nav-item active" id="navBtnDashboard" onclick="trocarAba('dashboard')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
           <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
         </svg>
-        Painel
+        Dashboard
+      </button>
+      <button class="nav-item" id="navBtnProcessos" onclick="trocarAba('processos')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/>
+        </svg>
+        Processos
         <span class="nav-item__badge" id="navBadge">0</span>
       </button>
       <button class="nav-item" onclick="abrirModalNovoProcesso()">
@@ -624,7 +705,11 @@
 
     <main class="content">
 
+      <!-- ABA DASHBOARD -->
+      <div id="abaDashboard">
+
       <div class="hero-banner">
+        <div class="hero-particles" id="heroParticles"></div>
         <div class="hero-banner__text">
           <div class="hero-banner__greeting">Painel de Controle</div>
           <h2 class="hero-banner__title">Processos SEI RJ</h2>
@@ -636,48 +721,67 @@
         </div>
       </div>
 
-      <div class="progress-card">
-        <div class="progress-card__header">
-          <span class="progress-card__title">Organização da base de recadastramento</span>
-          <span class="progress-card__pct" id="progPct">0%</span>
+      <!-- KPI CARDS -->
+      <div class="dash-grid">
+        <div class="dash-kpi">
+          <div class="dash-kpi__accent" style="background:linear-gradient(90deg,#2563eb,#60a5fa)"></div>
+          <div class="dash-kpi__label">Total de Processos</div>
+          <div class="dash-kpi__value" id="statTotal">0</div>
+          <div class="dash-kpi__sub">📁 registros cadastrados</div>
+          <div class="dash-kpi__icon">📁</div>
         </div>
-        <div class="progress-track">
-          <div class="progress-fill" id="progFill" style="width:0%"></div>
+        <div class="dash-kpi">
+          <div class="dash-kpi__accent" style="background:linear-gradient(90deg,#16a34a,#4ade80)"></div>
+          <div class="dash-kpi__label">Finalizados</div>
+          <div class="dash-kpi__value" id="dashFinalizado" style="color:#15803d">0</div>
+          <div class="dash-kpi__sub" id="dashFinalizadoPct">— do total</div>
+          <div class="dash-kpi__icon">✅</div>
         </div>
-        <div class="progress-steps" id="progSteps"></div>
+        <div class="dash-kpi">
+          <div class="dash-kpi__accent" style="background:linear-gradient(90deg,#d97706,#fbbf24)"></div>
+          <div class="dash-kpi__label">Pendentes</div>
+          <div class="dash-kpi__value" id="dashPendente" style="color:#b45309">0</div>
+          <div class="dash-kpi__sub" id="dashPendentePct">— do total</div>
+          <div class="dash-kpi__icon">⏳</div>
+        </div>
+        <div class="dash-kpi">
+          <div class="dash-kpi__accent" style="background:linear-gradient(90deg,#7c3aed,#a78bfa)"></div>
+          <div class="dash-kpi__label">Intimações Ativas</div>
+          <div class="dash-kpi__value" id="dashIntimacao" style="color:#6d28d9">0</div>
+          <div class="dash-kpi__sub" id="dashIntimacaoUrgente"></div>
+          <div class="dash-kpi__icon">📌</div>
+        </div>
       </div>
 
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-card__icon stat-card__icon--blue">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/></svg>
+      <!-- LINHA: GRÁFICO + URGÊNCIAS -->
+      <div class="dash-charts">
+        <!-- Conferências SEI -->
+        <div class="dash-chart-card">
+          <div class="dash-chart-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            Status das Conferências SEI
           </div>
-          <div>
-            <div class="stat-card__label">Total Registros</div>
-            <div class="stat-card__value" id="statTotal">0</div>
-          </div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-card__icon stat-card__icon--green">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-          </div>
-          <div>
-            <div class="stat-card__label">Com Processo SEI</div>
-            <div class="stat-card__value" id="statSei">0%</div>
-            <div class="stat-card__sub">Registros preenchidos</div>
+          <div class="dash-chart-wrap">
+            <canvas id="chartConf"></canvas>
           </div>
         </div>
-        <div class="stat-card" id="cardUltimoRestaurado">
-          <div class="stat-card__icon" style="background:#EEF2FF">
-            <svg viewBox="0 0 24 24" fill="none" stroke="#6366f1" stroke-width="2" stroke-linecap="round"><path d="M3 15v4c0 1.1.9 2 2 2h14a2 2 0 0 0 2-2v-4"/><path d="M17 8l-5-5-5 5"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+
+        <!-- Urgências do dia -->
+        <div class="dash-chart-card">
+          <div class="dash-chart-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            ⚠️ Requer Atenção
           </div>
-          <div style="min-width:0;flex:1">
-            <div class="stat-card__label">Último Arquivo Restaurado</div>
-            <div id="cardRestNome" style="font-size:13px;font-weight:700;color:#4f46e5;margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px">Nenhum</div>
-            <div id="cardRestData" style="font-size:11px;color:var(--gray-400);margin-top:2px">—</div>
+          <div id="dashUrgencias" style="display:flex;flex-direction:column;gap:8px;max-height:220px;overflow-y:auto">
+            <div style="text-align:center;color:var(--gray-400);font-size:13px;padding:20px">Carregando...</div>
           </div>
         </div>
       </div>
+
+      </div><!-- fim abaDashboard -->
+
+      <!-- ABA PROCESSOS -->
+      <div id="abaProcessos" style="display:none">
 
       <div class="filter-bar" id="filterBar" role="tablist"></div>
       <div class="finalizado-filter-bar" id="finalizadoFilterBar" aria-label="Filtro por finalização"></div>
@@ -724,6 +828,8 @@
           </table>
         </div>
       </div>
+
+      </div><!-- fim abaProcessos -->
 
     </main>
   </div>
@@ -1808,6 +1914,10 @@
         var badge=document.getElementById('navBadge');
         if(badge) badge.textContent=dados.length;
       }
+      var abaDash=document.getElementById('abaDashboard');
+      if(abaDash && abaDash.style.display!=='none' && typeof atualizarDashboard==='function'){
+        atualizarDashboard(filtrados);
+      }
 
       if(filtrados.length===0){
         if(dados.length===0 && filtroAtual==='Todas' && filtroFinalizado==='Todos' && !buscaAtual){
@@ -1993,15 +2103,18 @@
     function atualizarStats(){
       var tot=dados.length;
       var elTot=document.getElementById('statTotal');
-      if(elTot.textContent !== tot.toString()){
-        elTot.textContent=tot;
-        elTot.classList.add('bump');
-        setTimeout(function(){elTot.classList.remove('bump');},300);
+      if(elTot){
+        if(elTot.textContent !== tot.toString()){
+          elTot.textContent=tot;
+          elTot.classList.add('bump');
+          setTimeout(function(){elTot.classList.remove('bump');},300);
+        }
       }
-
-      var comSei=dados.filter(function(d){return !!d.sei;}).length;
-      document.getElementById('statSei').textContent=tot>0 ? Math.round((comSei/tot)*100)+'%' : '0%';
-
+      var elSei=document.getElementById('statSei');
+      if(elSei){
+        var comSei=dados.filter(function(d){return !!d.sei;}).length;
+        elSei.textContent=tot>0 ? Math.round((comSei/tot)*100)+'%' : '0%';
+      }
       var bkpEl=document.getElementById('statUltimoBkp');
       if(bkpEl){
         if(historicoBkp.length>0){
@@ -2035,9 +2148,9 @@
       s+='<div class="progress-step '+(tot>=1?'done':'')+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">'+(tot>=1?'<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>':'<circle cx="12" cy="12" r="10"/>')+'</svg> Ter registros cadastrados</div>';
       s+='<div class="progress-step '+(comSei?'done':'')+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">'+(comSei?'<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>':'<circle cx="12" cy="12" r="10"/>')+'</svg> Todos com SEI</div>';
       s+='<div class="progress-step '+(hasBkp?'done':'')+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">'+(hasBkp?'<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>':'<circle cx="12" cy="12" r="10"/>')+'</svg> Fazer backup</div>';
-      document.getElementById('progFill').style.width=p+'%';
-      document.getElementById('progPct').textContent=p+'%';
-      document.getElementById('progSteps').innerHTML=s;
+      var elFill=document.getElementById('progFill'); if(elFill) elFill.style.width=p+'%';
+      var elPct=document.getElementById('progPct'); if(elPct) elPct.textContent=p+'%';
+      var elSteps=document.getElementById('progSteps'); if(elSteps) elSteps.innerHTML=s;
     }
 
     function verificarAlertaBackup(){
@@ -2359,15 +2472,15 @@
         elData.classList.remove('none');
         elNome.textContent=ult.nome||'backup.json';
         elNome.classList.remove('none');
-        document.getElementById('cardRestNome').textContent=ult.nome||'backup.json';
-        document.getElementById('cardRestData').textContent=ult.data;
+        var crn=document.getElementById('cardRestNome'); if(crn) crn.textContent=ult.nome||'backup.json';
+        var crd=document.getElementById('cardRestData'); if(crd) crd.textContent=ult.data;
       } else {
         elData.textContent='Não sincronizado';
         elData.classList.add('none');
         elNome.textContent='—';
         elNome.classList.add('none');
-        document.getElementById('cardRestNome').textContent='Nenhum';
-        document.getElementById('cardRestData').textContent='—';
+        var crn2=document.getElementById('cardRestNome'); if(crn2) crn2.textContent='Nenhum';
+        var crd2=document.getElementById('cardRestData'); if(crd2) crd2.textContent='—';
       }
       badge.style.display='none';
     }
@@ -2806,6 +2919,210 @@
     // Inicializar
     carregarNome();
     atualizarStatus(navigator.onLine?'online':'offline','');
+    /* ═══ DASHBOARD CHARTS ═══ */
+    var chartConfInst=null;
+
+    function carregarChartJs(cb){
+      if(window.Chart){ cb(); return; }
+      var s=document.createElement('script');
+      s.src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js';
+      s.onload=cb;
+      document.head.appendChild(s);
+    }
+
+    function atualizarDashboard(dadosFiltrados){
+      var base=dadosFiltrados||dados;
+      var total=base.length;
+      var totalGeral=dados.length;
+      var finalizado=base.filter(function(d){return !!d.finalizado;}).length;
+      var pendente=total-finalizado;
+      var intimacoes=base.filter(function(d){return !!d.intimacao && !d.finalizado;}).length;
+      var intimUrgentes=base.filter(function(d){
+        if(d.finalizado||!d.intimacao||!d.prazoPrazo) return false;
+        var dias=diasParaPrazo(d.prazoPrazo);
+        return dias!==null && dias<=10;
+      }).length;
+      var filtroAtivo=total<totalGeral;
+      var el=function(id){return document.getElementById(id);};
+      if(el('statTotal')) el('statTotal').textContent=filtroAtivo?total+' / '+totalGeral:total;
+      if(el('dashFinalizado')) el('dashFinalizado').textContent=finalizado;
+      if(el('dashFinalizadoPct')) el('dashFinalizadoPct').textContent=total>0?Math.round(finalizado/total*100)+'%'+(filtroAtivo?' (filtro)':' do total'):'—';
+      if(el('dashPendente')) el('dashPendente').textContent=pendente;
+      if(el('dashPendentePct')) el('dashPendentePct').textContent=total>0?Math.round(pendente/total*100)+'%'+(filtroAtivo?' (filtro)':' do total'):'—';
+      if(el('dashIntimacao')) el('dashIntimacao').textContent=intimacoes;
+      if(el('dashIntimacaoUrgente')) el('dashIntimacaoUrgente').textContent=intimUrgentes>0?'⚠ '+intimUrgentes+' com prazo urgente':'Nenhuma urgência';
+      if(typeof animarContadores==='function') animarContadores();
+      renderizarUrgencias(base);
+      carregarChartJs(function(){ renderizarGraficos(base); });
+    }
+
+    function renderizarUrgencias(base){
+      var el=document.getElementById('dashUrgencias');
+      if(!el) return;
+      var urgentes=base.filter(function(d){
+        if(d.finalizado) return false;
+        if(d.intimacao && d.prazoPrazo){ var dias=diasParaPrazo(d.prazoPrazo); if(dias!==null && dias<=10) return true; }
+        if(!d.confData) return true;
+        var dc=diasParaPrazo(d.confData); if(dc!==null && -dc>10) return true;
+        return false;
+      });
+      if(urgentes.length===0){
+        el.innerHTML='<div style="text-align:center;padding:24px 0"><div style="font-size:28px;margin-bottom:8px">✅</div><div style="color:var(--gray-500);font-size:13px">Nenhuma urgência no momento!</div></div>';
+        return;
+      }
+      var html='';
+      urgentes.slice(0,8).forEach(function(d){
+        var motivo='';
+        var cor='#dc2626';
+        if(d.intimacao && d.prazoPrazo){
+          var dias=diasParaPrazo(d.prazoPrazo);
+          if(dias!==null && dias<0){ motivo='📌 Prazo vencido há '+Math.abs(dias)+'d'; cor='#dc2626'; }
+          else if(dias!==null && dias<=10){ motivo='📌 Prazo em '+dias+' dia'+(dias!==1?'s':''); cor='#d97706'; }
+        }
+        if(!motivo){
+          if(!d.confData){ motivo='🔍 Sem conferência'; cor='#6b7280'; }
+          else{ var dc=-diasParaPrazo(d.confData); motivo='🔍 Conf. há '+dc+'d'; cor='#d97706'; }
+        }
+        html+='<div style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;background:var(--gray-50);border-left:3px solid '+cor+'">'+
+          '<div style="min-width:0;flex:1">'+
+            '<div style="font-size:12px;font-weight:600;color:var(--gray-800);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">'+esc(d.razao||'—')+'</div>'+
+            '<div style="font-size:11px;color:'+cor+';font-weight:500;margin-top:2px">'+motivo+'</div>'+
+          '</div>'+
+        '</div>';
+      });
+      if(urgentes.length>8) html+='<div style="text-align:center;font-size:11px;color:var(--gray-400);padding:6px">+' +(urgentes.length-8)+' mais</div>';
+      el.innerHTML=html;
+    }
+
+    function renderizarGraficos(base){
+      // Gráfico de Conferências (Barras)
+      var confOk=0,confWarn=0,confDanger=0,confNone=0;
+      base.forEach(function(d){
+        if(d.finalizado) return;
+        if(!d.confData){ confNone++; return; }
+        var dp=diasParaPrazo(d.confData);
+        var pass=dp!==null?-dp:999;
+        if(pass<=7) confOk++;
+        else if(pass<=10) confWarn++;
+        else confDanger++;
+      });
+      var ctxC=document.getElementById('chartConf');
+      if(ctxC){
+        if(chartConfInst) chartConfInst.destroy();
+        chartConfInst=new Chart(ctxC,{
+          type:'bar',
+          data:{
+            labels:['✅ Em dia\n(≤7d)','⚠ Atenção\n(8-10d)','🔴 Atrasada\n(>10d)','❓ Não\nconferido'],
+            datasets:[{data:[confOk,confWarn,confDanger,confNone],backgroundColor:['#16a34a','#d97706','#dc2626','#94a3b8'],borderRadius:8,borderSkipped:false}]
+          },
+          options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:function(c){return ' '+c.raw+' processo'+(c.raw!==1?'s':'')}}}},scales:{y:{beginAtZero:true,ticks:{stepSize:1,font:{size:10}},grid:{color:'#f1f5f9'}},x:{ticks:{font:{size:9}},grid:{display:false}}}}
+        });
+      }
+    }
+    /* ═══ SISTEMA DE ABAS ═══ */
+    function trocarAba(aba){
+      var abaDash=document.getElementById('abaDashboard');
+      var abaProc=document.getElementById('abaProcessos');
+      var btnDash=document.getElementById('navBtnDashboard');
+      var btnProc=document.getElementById('navBtnProcessos');
+      if(aba==='dashboard'){
+        abaDash.style.display='';
+        abaProc.style.display='none';
+        btnDash.classList.add('active');
+        btnProc.classList.remove('active');
+        // Atualiza gráficos ao voltar para o dashboard
+        if(typeof atualizarDashboard==='function'){
+          var filtrados=obterFiltrados();
+          atualizarDashboard(filtrados);
+        }
+      } else {
+        abaDash.style.display='none';
+        abaProc.style.display='';
+        btnDash.classList.remove('active');
+        btnProc.classList.add('active');
+      }
+    }
+
+    function obterFiltrados(){
+      return dados.filter(function(d){
+        var inTipo=filtroAtual==='Todas'||(d.tipo||'')===filtroAtual;
+        var inFinalizado=filtroFinalizado==='Todos'||(filtroFinalizado==='Sim'?!!d.finalizado:!d.finalizado);
+        var inIntimacao=filtroIntimacao==='Todos'||(filtroIntimacao==='Sim'?!!d.intimacao:!d.intimacao);
+        if(!inTipo||!inFinalizado||!inIntimacao) return false;
+        if(!buscaAtual) return true;
+        var campos=[d.razao,d.cnpj,d.ie,d.inspetoria,d.sei,d.tipo,d.link,d.observacao].join(' ').toLowerCase();
+        return campos.indexOf(buscaAtual)>-1;
+      });
+    }
+    /* ═══ SPLASH SCREEN ═══ */
+    (function(){
+      var bar=document.getElementById('splashBar');
+      var txt=document.getElementById('splashText');
+      var msgs=['Carregando sistema...','Conectando ao Drive...','Preparando dados...','Quase lá...'];
+      var pct=0;
+      var msgIdx=0;
+      var interval=setInterval(function(){
+        pct+=Math.random()*18+8;
+        if(pct>100) pct=100;
+        bar.style.width=pct+'%';
+        if(pct>25 && msgIdx===0){ msgIdx=1; txt.textContent=msgs[1]; }
+        if(pct>55 && msgIdx===1){ msgIdx=2; txt.textContent=msgs[2]; }
+        if(pct>80 && msgIdx===2){ msgIdx=3; txt.textContent=msgs[3]; }
+        if(pct>=100){
+          clearInterval(interval);
+          setTimeout(function(){
+            document.getElementById('splash').classList.add('hide');
+            setTimeout(function(){
+              document.getElementById('splash').style.display='none';
+              iniciarParticulas();
+            },650);
+          },400);
+        }
+      },120);
+    })();
+
+    /* ═══ PARTÍCULAS HERO ═══ */
+    function iniciarParticulas(){
+      var container=document.getElementById('heroParticles');
+      if(!container) return;
+      for(var i=0;i<18;i++){
+        criarParticula(container);
+      }
+    }
+    function criarParticula(container){
+      var p=document.createElement('div');
+      p.className='particle';
+      var size=Math.random()*12+4;
+      var left=Math.random()*100;
+      var delay=Math.random()*6;
+      var duration=Math.random()*8+6;
+      p.style.cssText='width:'+size+'px;height:'+size+'px;left:'+left+'%;bottom:-20px;animation-duration:'+duration+'s;animation-delay:'+delay+'s;opacity:'+(Math.random()*.15+.05);
+      container.appendChild(p);
+    }
+
+    /* ═══ CONTADORES ANIMADOS ═══ */
+    function animarContadores(){
+      var ids=['statTotal','dashFinalizado','dashPendente','dashIntimacao'];
+      ids.forEach(function(id, idx){
+        var el=document.getElementById(id);
+        if(!el) return;
+        var target=parseInt(el.textContent)||0;
+        if(!target) return;
+        var duration=700+idx*100;
+        var start=performance.now();
+        el.textContent='0';
+        function step(now){
+          var elapsed=now-start;
+          var progress=Math.min(elapsed/duration,1);
+          // easeOutExpo
+          var ease=progress===1?1:1-Math.pow(2,-10*progress);
+          el.textContent=Math.round(ease*target);
+          if(progress<1) requestAnimationFrame(step);
+          else el.textContent=target;
+        }
+        setTimeout(function(){ requestAnimationFrame(step); }, idx*80);
+      });
+    }
   </script>
 </body>
 </html>
