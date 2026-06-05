@@ -2243,16 +2243,33 @@
               confObs: item.confObs || ''
             };
           });
-          var adicionados=0;
+          var adicionados=0, atualizados=0;
           itens.forEach(function(novo){
-            var existe=dados.some(function(atual){
-              return atual.id===novo.id || 
-                (String(atual.cnpj).toLowerCase()===String(novo.cnpj).toLowerCase() && String(atual.sei).toLowerCase()===String(novo.sei).toLowerCase());
-            });
-            if(!existe){
+            var existeIdx=-1;
+            for(var i=0;i<dados.length;i++){
+              if(dados[i].id===novo.id ||
+                (String(dados[i].cnpj).toLowerCase()===String(novo.cnpj).toLowerCase() &&
+                 String(dados[i].sei).toLowerCase()===String(novo.sei).toLowerCase())){
+                existeIdx=i; break;
+              }
+            }
+            if(existeIdx===-1){
               novo.id=novo.id || Date.now()+adicionados;
               dados.push(novo);
               adicionados++;
+            } else {
+              // Atualiza campos do registro existente preservando dados locais
+              var atual=dados[existeIdx];
+              atual.finalizado=novo.finalizado!==undefined?novo.finalizado:atual.finalizado;
+              atual.intimacao=novo.intimacao!==undefined?novo.intimacao:atual.intimacao;
+              atual.prazoPrazo=novo.prazoPrazo||atual.prazoPrazo;
+              atual.respostaData=novo.respostaData||atual.respostaData;
+              atual.respostaTexto=novo.respostaTexto||atual.respostaTexto;
+              atual.confData=novo.confData||atual.confData;
+              atual.confStatus=novo.confStatus||atual.confStatus;
+              atual.confObs=novo.confObs||atual.confObs;
+              atual.observacao=novo.observacao||atual.observacao;
+              atualizados++;
             }
           });
           salvarStorage();
@@ -2264,7 +2281,7 @@
           atualizarProgresso();
           fecharModal('modalRest');
           registrarRestauracaoDrive(fi.files[0].name);
-          showToast(adicionados>0?'Mesclagem concluída! '+adicionados+' novos registros incluídos.':'Nenhum registro novo para adicionar.','success');
+          showToast(adicionados>0?'Mesclagem concluída! '+adicionados+' novos e '+atualizados+' atualizados.':atualizados>0?'✅ '+atualizados+' registro(s) atualizado(s).':'Nenhuma alteração encontrada.','success');
         }catch(err){
           showToast('Erro ao ler o arquivo de backup.','error');
         }
@@ -2521,7 +2538,7 @@
           var nomeArq=c.nomeArquivo||'backup_drive.json';
           var tsArquivo=c.dataBackup||'';
 
-          // Opção A: Drive sempre vence — substitui tudo
+          // Drive sempre vence — substitui tudo
           dados=lista.map(function(item, idx){
             return {
               id: item.id!==undefined && item.id!==null && item.id!=='' ? Number(item.id) : (Date.now()+idx),
@@ -2530,7 +2547,9 @@
               tipo:(item.tipo!==undefined && item.tipo!==null) ? String(item.tipo) : 'RECADASTRAMENTO',
               link:item.link||'', observacao:item.observacao||'',
               finalizado:valorFinalizado(item.finalizado),
-              intimacao:!!(item.intimacao), prazoPrazo:item.prazoPrazo||''
+              intimacao:!!(item.intimacao), prazoPrazo:item.prazoPrazo||'',
+              respostaData:item.respostaData||'', respostaTexto:item.respostaTexto||'',
+              confData:item.confData||'', confStatus:item.confStatus||'', confObs:item.confObs||''
             };
           });
 
